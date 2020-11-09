@@ -31,10 +31,9 @@ class DB {
   }
 
 
-  static function raw($qry) {
-    $db = new DB();
-    self::$qry = $qry;
-    return $db;
+  static function raw($sql) {
+    self::$data = self::$conn->query($sql);
+    return self::$data;
   }
 
 
@@ -213,6 +212,5 @@ class DB {
     ];
     return $data;
   }
-
 
 }

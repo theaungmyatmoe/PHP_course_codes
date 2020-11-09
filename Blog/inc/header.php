@@ -65,17 +65,17 @@ require_once 'core/autoload.php';
             ?>
           </div>
         </li>
-            <?php
-            if (!User::auth()) {
-              ?>
-        <li class="nav-item ml-5">
-          <a class="nav-link btn btn-sm  btn-warning" href="">
-            <i class="fas fa-plus"></i>
-            Create Article</a>
-        </li>
         <?php
-            }
-            ?>
+        if (!User::auth()) {
+          ?>
+          <li class="nav-item ml-5">
+            <a class="nav-link btn btn-sm  btn-warning" href="">
+              <i class="fas fa-plus"></i>
+              Create Article</a>
+          </li>
+          <?php
+        }
+        ?>
       </ul>
       <form class="form-inline my-2 my-lg-0">
         <input class="form-control mr-sm-2" type="search" placeholder="Search"
@@ -118,21 +118,31 @@ require_once 'core/autoload.php';
           </div>
           <div class="card-body">
             <ul class="list-group">
-              <li
-                class="list-group-item d-flex justify-content-between align-items-center">
-                Cras justo odio
-                <span class="badge badge-primary badge-pill">14</span>
-              </li>
-              <li
-                class="list-group-item d-flex justify-content-between align-items-center">
-                Dapibus ac facilisis in
-                <span class="badge badge-primary badge-pill">2</span>
-              </li>
-              <li
-                class="list-group-item d-flex justify-content-between align-items-center">
-                Morbi leo risus
-                <span class="badge badge-primary badge-pill">1</span>
-              </li>
+              <?php
+
+              $sql = "SELECT *,
+(SELECT COUNT(id) FROM articles
+WHERE category_id=categories.id
+) as cat_counts
+FROM categories";
+              $categories = DB::raw($sql);
+              foreach ($categories as $cat) {
+                ?>
+
+                <li
+                  class="list-group-item d-flex justify-content-between align-items-center">
+                  <?php echo $cat['name']; ?>
+                  <span class="badge badge-primary badge-pill"><?
+                    echo $cat['cat_counts'];
+                    ?></span>
+                </li>
+
+
+                <?php
+              }
+              ?>
+
+
             </ul>
           </div>
 
@@ -146,21 +156,30 @@ require_once 'core/autoload.php';
 
           <div class="card-body">
             <ul class="list-group">
-              <li
-                class="list-group-item d-flex justify-content-between align-items-center">
-                Cras justo odio
-                <span class="badge badge-primary badge-pill">14</span>
-              </li>
-              <li
-                class="list-group-item d-flex justify-content-between align-items-center">
-                Dapibus ac facilisis in
-                <span class="badge badge-primary badge-pill">2</span>
-              </li>
-              <li
-                class="list-group-item d-flex justify-content-between align-items-center">
-                Morbi leo risus
-                <span class="badge badge-primary badge-pill">1</span>
-              </li>
+
+              <?php
+              $qry = "SELECT *,
+(SELECT COUNT(id) FROM article_language
+WHERE language_id=languages.id
+) as language_counts
+FROM
+languages";
+              $langs = DB::raw($qry);
+              foreach ($langs as $lang) {
+                ?>
+                <li
+                  class="list-group-item d-flex justify-content-between align-items-center">
+<?php
+echo $lang['name'];
+?>
+                  <span class="badge badge-primary badge-pill"><?php
+echo $lang['language_counts'];
+?></span>
+                </li>
+
+                <?php
+              }
+              ?>
             </ul>
           </div>
 
