@@ -54,7 +54,7 @@ class DB {
 
   // count rows
 
-  function countIt() {
+  function count() {
     self::$count = self::$stmt->rowCount();
     return self::$count;
   }
@@ -78,7 +78,6 @@ class DB {
 
   function orderBy($fieldName, $val) {
     self::$qry .= " ORDER BY {$fieldName} {$val}";
-    echo self::$qry;
     $this->query();
     return $this;
   }
@@ -205,7 +204,7 @@ class DB {
     $this->query();
     self::$data = self::$stmt->fetchAll(PDO::FETCH_OBJ);
     $data = [
-      'pdata' => self::$data,
+      'data' => self::$data,
       'total' => $total,
       'prev_page' => '?page='.$prev_page,
       'next_page' => '?page='.$next_page
