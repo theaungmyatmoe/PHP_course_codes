@@ -49,7 +49,7 @@ $posts = Post::all();
               </div>
               <div
                 class="col-md-4 text-center">
-                <a href=""
+                <a href="detail.php?slug=<?php echo $post->slug;  ?>"
                   class="badge badge-warning p-1">View</a>
               </div>
             </div>
