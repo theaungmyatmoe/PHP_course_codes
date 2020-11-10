@@ -9,18 +9,6 @@ if (empty($slug)) {
 }
 ?>
 
-<div class="jumbotron jumbotron-fluid header">
-  <div class="container">
-    <h1 class="text-white">MM-Coder Online Course</h1>
-    <h1 class="display-4 text-white">Welcome Com From Advance PHP Online Class</h1>
-    <p class="lead text-white">
-      Hello Now We publish this course free.
-    </p>
-    <br>
-    <a href="" class="btn btn-warning">Create Account</a>
-    <a href="" class="btn btn-outline-success">Login</a>
-  </div>
-</div>
 
 <!-- Content -->
 <div class="container-fluid">
@@ -41,12 +29,23 @@ if (empty($slug)) {
                       <div class="row">
                         <div
                           class="col-md-4 text-center">
-                          <i
-                            class="fas fa-heart text-warning">
-                          </i>
+                          <?php
+                          if (isset($_SESSION['user_id'])) {
+                            $userId = $_SESSION['user_id'];
+                          } 
+
+                          ?>
+                          <button
+                            class="fas fa-heart text-warning" id="like" userId="<?php echo $userId ?? '' ?>" articleId="<?php
+                       echo $post->id;     
+                            ?>">
+                          </button>
                           <small
-                            class="text-muted"><?php
-                            echo $post->like_counts; ?></small>
+                            class="text-muted" id="showCount">
+                   <?php
+                   echo $post->like_counts;
+                   ?>
+                          </small>
                         </div>
                         <div
                           class="col-md-4 text-center">
@@ -95,7 +94,7 @@ if (empty($slug)) {
           </div>
 
           <!-- Comments -->
-          <div class="card card-dark">
+          <div class="card card-dark w-100">
             <div class="card-header">
               <h4>Comments</h4>
             </div>
@@ -112,14 +111,17 @@ if (empty($slug)) {
                       <img src="https://s3.amazonaws.com/uifaces/faces/twitter/dancounsell/128.jpg"
                       style="width:50px;border-radius:50%"
                       alt="">
+
                     </div>
                     <div
                       class="col-md-4 d-flex align-items-center">
+
                       <?
                       $users = Post::user($cmt->user_id);
                       foreach ($users as $user) {
-
-                        echo $user->name;
+                        ?>
+                        <?php echo $user->name; ?>
+                        <?php
                       }
                       ?>
                     </div>
@@ -146,9 +148,26 @@ if (empty($slug)) {
 </div>
 
 <script>
-  $(document).ready(function () {
-    $('body').bootstrapMaterialDesign();
-  });
+  let like = document.querySelector('#like');
+  like.addEventListener('click', likeIt);
+  function likeIt() {
+   let userId = like.getAttribute('userId');
+   let articleId = like.getAttribute('articleId');
+   let showCount = document.querySelector('#showCount');
+  if(userId == ''){
+    location.href = "login.php"
+  }else{
+    axios.get(`like.php?userId=${userId}&articleId=${articleId}`).then((res)=>{
+      if(res.data == 'liked'){
+        toastr.warning('You have already liked!')
+      }
+      if(Number.isInteger(res.data)){
+        showCount.innerHTML = res.data;
+        toastr.success('You Liked Successfilly!')
+      }
+    })
+  }
+  }
 </script>
 <?php
 require_once 'inc/footer.php';

@@ -19,6 +19,13 @@ require_once 'core/autoload.php';
   integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX"
   crossorigin="anonymous">
   <link rel="stylesheet" href="assets/style/style.css">
+<link rel="stylesheet" href="  https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css
+">
+  <script type="text/javascript" charset="utf-8" src="app.js">
+  </script>
+  <script>
+    var vConsole = new VConsole();
+  </script>
   <title>MM-Coder</title>
   <style>
 
@@ -169,12 +176,12 @@ languages";
                 ?>
                 <li
                   class="list-group-item d-flex justify-content-between align-items-center">
-<?php
-echo $lang['name'];
-?>
+                  <?php
+                  echo $lang['name'];
+                  ?>
                   <span class="badge badge-primary badge-pill"><?php
-echo $lang['language_counts'];
-?></span>
+                    echo $lang['language_counts'];
+                    ?></span>
                 </li>
 
                 <?php
