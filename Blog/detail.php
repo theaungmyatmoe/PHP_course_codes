@@ -32,19 +32,19 @@ if (empty($slug)) {
                           <?php
                           if (isset($_SESSION['user_id'])) {
                             $userId = $_SESSION['user_id'];
-                          } 
+                          }
 
                           ?>
                           <button
                             class="fas fa-heart text-warning" id="like" userId="<?php echo $userId ?? '' ?>" articleId="<?php
-                       echo $post->id;     
+                            echo $post->id;
                             ?>">
                           </button>
                           <small
                             class="text-muted" id="showCount">
-                   <?php
-                   echo $post->like_counts;
-                   ?>
+                            <?php
+                            echo $post->like_counts;
+                            ?>
                           </small>
                         </div>
                         <div
@@ -100,6 +100,13 @@ if (empty($slug)) {
             </div>
             <div class="card-body">
               <!-- Loop Comment -->
+              <form action="" method="post" id="form" article_id="<?php echo $post->id ?>">
+                <div class="form-group">
+                  <input type="text" id="cmt" class="form-control" placeholder="Comment Something">
+                </div>
+                <input type="submit" value="Comment" class="btn btn-outline-danger">
+              </form>
+              <div id="cmt_list"></div>
               <?php
               $cmts = Post::comments($post->id);
               ?>
@@ -108,7 +115,10 @@ if (empty($slug)) {
                 <div class="card-body">
                   <div class="row">
                     <div class="col-md-1">
-                      <img src="https://s3.amazonaws.com/uifaces/faces/twitter/dancounsell/128.jpg"
+                      <img src="<?php
+             $u = DB::table('users')->where('id',$cmt->user_id)->getOne();
+             echo $u->profile_img;
+                      ?>"
                       style="width:50px;border-radius:50%"
                       alt="">
 
@@ -151,23 +161,43 @@ if (empty($slug)) {
   let like = document.querySelector('#like');
   like.addEventListener('click', likeIt);
   function likeIt() {
-   let userId = like.getAttribute('userId');
-   let articleId = like.getAttribute('articleId');
-   let showCount = document.querySelector('#showCount');
-  if(userId == ''){
-    location.href = "login.php"
-  }else{
-    axios.get(`like.php?userId=${userId}&articleId=${articleId}`).then((res)=>{
-      if(res.data == 'liked'){
-        toastr.warning('You have already liked!')
-      }
-      if(Number.isInteger(res.data)){
-        showCount.innerHTML = res.data;
-        toastr.success('You Liked Successfilly!')
-      }
+    let userId = like.getAttribute('userId');
+    let articleId = like.getAttribute('articleId');
+    let showCount = document.querySelector('#showCount');
+    if (userId == '') {
+      location.href = "login.php"
+    } else {
+      axios.get(`like.php?userId=${userId}&articleId=${articleId}`).then((res)=> {
+        if (res.data == 'liked') {
+          toastr.warning('You have already liked!')
+        }
+        if (Number.isInteger(res.data)) {
+          showCount.innerHTML = res.data;
+          toastr.success('You Liked Successfilly!')
+        }
+      })
+    }
+  }
+
+  // Comment
+
+  let cmt_list = document.querySelector("#cmt_list");
+  let form = document.querySelector('#form');
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    let cmt = document.querySelector("#cmt");
+    let data = new FormData();
+    let article_id = form.getAttribute('article_id');
+    data.append('comment', cmt.value)
+    data.append('article_id', article_id)
+    axios.post('comment.php', data)
+    .then((res)=> {
+      cmt_list.innerHTML = res.data;
+      console.log(res.data);
     })
-  }
-  }
+  });
+
 </script>
 <?php
 require_once 'inc/footer.php';

@@ -19,9 +19,7 @@ if (isset($request)) {
     echo 'liked';
   }
 
-
 }
-
 
 
 
