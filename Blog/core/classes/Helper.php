@@ -16,4 +16,9 @@ class Helper
     $str = htmlspecialchars($str);
     return $str;
   }
+  static function slug($str){
+    $str = strtolower($str);
+    $str = str_replace(' ','-',$str);
+    return $str;
+  }
 }

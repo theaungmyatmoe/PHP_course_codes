@@ -38,6 +38,7 @@ class User {
       } else {
         // Filter String To Prevent XSS
         $user = DB::create('users', [
+          'slug'=>Helper::slug($request['name']).rand(),
           'name' => Helper::strFilter($request['name']),
           'email' => Helper::strFilter($request['email']),
           'password' => Helper::strFilter(password_hash($request['password'], PASSWORD_BCRYPT)
@@ -79,5 +80,22 @@ class User {
       return $errors;
     }
   }
-
+  // Profile Updae
+static function profile($slug){
+ $user = DB::table('users')->where('slug',$slug)->getOne();
+  return $user;
+}
+static function update($request,$id){
+  
+  // Move
+  $img = $_FILES['image'];
+  move_uploaded_file($img['tmp_name'],'assets/users/'.$img['name']);
+ // update
+ DB::update('users',[
+   'name'=>$request['name'],
+   'password'=>$request['password'],
+   'profile_img'=>$img['name']
+   ],$id);
+ 
+}
 }

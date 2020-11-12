@@ -55,6 +55,32 @@ class Post
     $sql = "SELECT * FROM article_language INNER JOIN articles ON article_language.article_id=articles.id WHERE article_language.id=1";
     $articles = DB::raw($sql);
     return $articles;
-    
+
   }
+
+  static function create($request) {
+    // Move File
+    $img = $_FILES['image'];
+    move_uploaded_file($img['tmp_name'], 'assets/imgs/'.$img['name']);
+
+    // Insert Into DB
+
+    $post = DB::create('articles', [
+      'user_id' => User::auth()->id,
+      'category_id' => $request['category'],
+      'slug' => Helper::slug($request['title']),
+      'title' => $request['title'],
+      'content' => $request['content'],
+      'img' => $img['name']
+    ]);
+
+    // Insert Langiage To Language DB
+    foreach ($request['langs'] as $lang) {
+      DB::create('article_language', [
+        'article_id' => $post->id,
+        'language_id' => $lang
+      ]);
+    }
+  }
+
 }

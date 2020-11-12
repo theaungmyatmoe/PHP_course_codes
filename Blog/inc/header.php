@@ -63,6 +63,8 @@ require_once 'core/autoload.php';
             } else {
               ?>
               <a class="dropdown-item" href="#">Welcome <?echo User::auth()->name; ?></a>
+              <a class="dropdown-item" href="profile.php?user=<?php echo User::auth()->slug;
+              ?>">Edit Profile</a>
               <a class="dropdown-item" href="logout.php">Logout</a>
 
               <?php
@@ -74,7 +76,7 @@ require_once 'core/autoload.php';
         if (!User::auth()) {
           ?>
           <li class="nav-item ml-5">
-            <a class="nav-link btn btn-sm  btn-warning" href="">
+            <a class="nav-link btn btn-sm  btn-warning" href="create.php">
               <i class="fas fa-plus"></i>
               Create Article</a>
           </li>

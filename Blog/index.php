@@ -28,11 +28,11 @@ if (isset($_GET['category'])) {
       <div class="col-md-4 mt-2">
         <div class="card">
           <img class="card-img-top"
-          src=""
+          src="assets/imgs/<?php echo $post->img; ?>"
           alt="Card image " alt="Image">
           <div class="card-body">
             <h5 class="text-dark"><?php
-              echo $post->title;
+              echo $post->img;
               ?></h5>
           </div>
           <div class="card-footer">
