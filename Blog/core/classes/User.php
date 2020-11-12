@@ -6,13 +6,13 @@ class User {
 
   // Check Auth Of User
   static function auth() {
-  $sid = $_SESSION['user_id'];
-  $db = DB::table('users')->where('id',$sid)->getOne();
-  if($db){
-    return $db;
-  }else{
-    return false;
-  }
+    $sid = $_SESSION['user_id'];
+    $db = DB::table('users')->where('id', $sid)->getOne();
+    if ($db) {
+      return $db;
+    } else {
+      return false;
+    }
   }
 
   // Valide User Registeration
@@ -51,33 +51,33 @@ class User {
     }
 
   }
-  
+
   // Validate Login
-  
-  function login($request){
-    if(isset($request)){
+
+  function login($request) {
+    if (isset($request)) {
       $email = Helper::strFilter($request['email']);
       $password = $request['password'];
       $errors = [];
-      // Check Email 
-      if(empty($email)){
+      // Check Email
+      if (empty($email)) {
         $errors[] = "Email Should Not Empty";
       }
       // Check password
-      if(empty($password)){
+      if (empty($password)) {
         $errors[] = "Pssword Should Not Empty";
       }
-      $userByMail = DB::table('users')->where('email',$email)->getOne();
+      $userByMail = DB::table('users')->where('email', $email)->getOne();
       $hashPass = $userByMail->password;
       // Verify Pass
-      if(password_verify($password,$hashPass)){
+      if (password_verify($password, $hashPass)) {
         $_SESSION['user_id'] = $userByMail->id;
         Helper::redirect('index');
-      }else{
+      } else {
         $errors[] = "Email and Password Are Not Valid!";
       }
       return $errors;
     }
   }
-  
+
 }

@@ -1,9 +1,13 @@
 <?php
 require_once 'inc/header.php';
 
-if($_SERVER['REQUEST_METHOD'] == 'POST'){
-$user =  new User();
-$login = $user->login($_POST);
+if(User::auth()){
+  Helper::redirect('index');
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  $user = new User();
+  $login = $user->login($_POST);
 }
 ?>
 <div class="card card-dark">

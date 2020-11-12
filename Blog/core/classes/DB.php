@@ -180,7 +180,7 @@ class DB {
     $db->query();
     return true;
   }
-  function paginate($pageRecord) {
+  function paginate($pageRecord,$append="") {
     if (isset($_GET['page'])) {
       if (!is_numeric($_GET['page'])) {
         $_GET['page'] = 1;
@@ -206,8 +206,8 @@ class DB {
     $data = [
       'data' => self::$data,
       'total' => $total,
-      'prev_page' => '?page='.$prev_page,
-      'next_page' => '?page='.$next_page
+      'prev_page' => '?page='.$prev_page."&$append",
+      'next_page' => '?page='.$next_page."&$append"
     ];
     return $data;
   }

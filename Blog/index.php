@@ -1,6 +1,15 @@
 <?php
 require_once 'inc/header.php';
-$posts = Post::all();
+
+if (isset($_GET['category'])) {
+  $slug = $_GET['category'];
+  $posts = Post::catBySlug($slug);
+}elseif (isset($_GET['language'])) {
+  $slug = $_GET['language'];
+ $posts = Post::langBySlug($slug);
+} else {
+  $posts = Post::all();
+}
 ?>
 
 <!-- Pagination  -->
@@ -15,7 +24,7 @@ $posts = Post::all();
   <div class="card-body">
     <div class="row">
       <!-- Loop this -->
-         <?php foreach ($posts['data'] as $post): ?>
+      <?php foreach ($posts['data'] as $post): ?>
       <div class="col-md-4 mt-2">
         <div class="card">
           <img class="card-img-top"
@@ -23,8 +32,8 @@ $posts = Post::all();
           alt="Card image " alt="Image">
           <div class="card-body">
             <h5 class="text-dark"><?php
-            echo $post->title;
-            ?></h5>
+              echo $post->title;
+              ?></h5>
           </div>
           <div class="card-footer">
             <div class="row">
@@ -49,7 +58,7 @@ $posts = Post::all();
               </div>
               <div
                 class="col-md-4 text-center">
-                <a href="detail.php?slug=<?php echo $post->slug;  ?>"
+                <a href="detail.php?slug=<?php echo $post->slug; ?>"
                   class="badge badge-warning p-1">View</a>
               </div>
             </div>
@@ -58,7 +67,7 @@ $posts = Post::all();
         </div>
 
       </div>
-              <?php endforeach; ?>
+      <?php endforeach; ?>
 
     </div>
   </div>
