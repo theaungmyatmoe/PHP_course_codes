@@ -21,10 +21,7 @@ require_once 'core/autoload.php';
   <link rel="stylesheet" href="assets/style/style.css">
   <link rel="stylesheet" href="  https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css
   ">
-  <script src="app.js"></script>
-  <script>
-    var vConsole = new VConsole();
-  </script>
+
   <title>MM-Coder</title>
   <style>
 
