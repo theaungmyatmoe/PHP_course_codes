@@ -21,7 +21,8 @@ require_once 'core/autoload.php';
   <link rel="stylesheet" href="assets/style/style.css">
   <link rel="stylesheet" href="  https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css
   ">
-  <script type="text/javascript" charset="utf-8" src="app.js"> < script >
+  <script src="app.js"></script>
+  <script>
     var vConsole = new VConsole();
   </script>
   <title>MM-Coder</title>
@@ -64,7 +65,7 @@ require_once 'core/autoload.php';
               ?>
               <a class="dropdown-item" href="#">Welcome <?echo User::auth()->name; ?></a>
               <a class="dropdown-item" href="profile.php?user=<?php echo User::auth()->slug;
-              ?>">Edit Profile</a>
+                ?>">Edit Profile</a>
               <a class="dropdown-item" href="logout.php">Logout</a>
 
               <?php
@@ -73,8 +74,12 @@ require_once 'core/autoload.php';
           </div>
         </li>
         <?php
-        if (!User::auth()) {
+        if (User::auth()) {
           ?>
+                  <li class="nav-item">
+          <a class="nav-link" href="index.php?owner=<? echo User::auth()->slug; ?>">My Articles</a>
+        </li>
+
           <li class="nav-item ml-5">
             <a class="nav-link btn btn-sm  btn-warning" href="create.php">
               <i class="fas fa-plus"></i>
@@ -86,8 +91,8 @@ require_once 'core/autoload.php';
       </ul>
       <form class="form-inline my-2 my-lg-0">
         <input class="form-control mr-sm-2" type="search" placeholder="Search"
-        aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        aria-label="Search" name="search" id="search" autocomplete="off">
+        <a class="btn btn-outline-success my-2 my-sm-0" onclick="searchIt">Search</a>
       </form>
     </div>
   </nav>
@@ -199,3 +204,4 @@ languages";
 
       <!-- Content -->
       <div class="col-md-8">
+        

@@ -7,7 +7,7 @@ class Post
 {
 
   public static function all() {
-    $articles = DB::table("articles")->orderBy('id', 'DESC')->paginate(2);
+    $articles = DB::table("articles")->orderBy('id', 'DESC')->paginate(5);
 
     foreach ($articles['data'] as $key => $val) {
       $articles['data'][$key]->comment_counts = DB::table('comments')->where('article_id', $val->id)->count();
@@ -81,6 +81,59 @@ class Post
         'language_id' => $lang
       ]);
     }
+  }
+
+  static function search($search) {
+    $articles = DB::table("articles")->where('title', 'like', "%$search%")->orderBy('id', 'DESC')->paginate(5);
+    // die();
+    foreach ($articles['data'] as $key => $val) {
+      $articles['data'][$key]->comment_counts = DB::table('comments')->where('article_id', $val->id)->count();
+      $articles['data'][$key]->like_counts = DB::table('article_likes')->where('article_id', $val->id)->count();
+    }
+    return $articles;
+  }
+
+  static function delete($slug) {
+    $id = DB::table('articles')->where('slug', $slug)->getOne()->id;
+    DB::delete('articles', $id);
+  }
+  static function edit($slug) {
+    $post = DB::table('articles')->where('slug', $slug)->getOne();
+    return $post;
+  }
+
+  static function updatePost($request, $slug) {
+    $id = DB::table('articles')->where('slug', $slug)->getOne()->id;
+    $imgName = '';
+    // Move File
+    $img = $_FILES['image'];
+    move_uploaded_file($img['tmp_name'], 'assets/imgs/'.$img['name']);
+    if (empty($img['name'])) {
+      $imgName = $request['oldImg'];
+    } else {
+      $imgName = $img['name'];
+    }
+    // Insert Into DB
+
+    $post = DB::update('articles', [
+      'category_id' => $request['category'],
+      'slug' => Helper::slug($request['title']),
+      'title' => $request['title'],
+      'content' => $request['content'],
+      'img' => $imgName
+    ], $id);
+    Helper::redirect('index');
+  }
+
+  static function ownerPost($slug) {
+    $id = User::auth()->id;
+    $articles = DB::table("articles")->where('user_id',$id)->orderBy('id', 'DESC')->paginate(5);
+
+    foreach ($articles['data'] as $key => $val) {
+      $articles['data'][$key]->comment_counts = DB::table('comments')->where('article_id', $val->id)->count();
+      $articles['data'][$key]->like_counts = DB::table('article_likes')->where('article_id', $val->id)->count();
+    }
+    return $articles;
   }
 
 }

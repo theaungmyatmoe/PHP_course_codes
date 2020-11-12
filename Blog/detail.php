@@ -157,48 +157,6 @@ if (empty($slug)) {
 
 </div>
 
-<script>
-  let like = document.querySelector('#like');
-  like.addEventListener('click', likeIt);
-  function likeIt() {
-    let userId = like.getAttribute('userId');
-    let articleId = like.getAttribute('articleId');
-    let showCount = document.querySelector('#showCount');
-    if (userId == '') {
-      location.href = "login.php"
-    } else {
-      axios.get(`like.php?userId=${userId}&articleId=${articleId}`).then((res)=> {
-        if (res.data == 'liked') {
-          toastr.warning('You have already liked!')
-        }
-        if (Number.isInteger(res.data)) {
-          showCount.innerHTML = res.data;
-          toastr.success('You Liked Successfilly!')
-        }
-      })
-    }
-  }
-
-  // Comment
-
-  let cmt_list = document.querySelector("#cmt_list");
-  let form = document.querySelector('#form');
-
-  form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    let cmt = document.querySelector("#cmt");
-    let data = new FormData();
-    let article_id = form.getAttribute('article_id');
-    data.append('comment', cmt.value)
-    data.append('article_id', article_id)
-    axios.post('comment.php', data)
-    .then((res)=> {
-      cmt_list.innerHTML = res.data;
-      console.log(res.data);
-    })
-  });
-
-</script>
 <?php
 require_once 'inc/footer.php';
 
